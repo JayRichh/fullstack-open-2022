@@ -1,79 +1,42 @@
-// 1.1 course information step1
-const Header = (props) => {
-  return (
-    <div>
-      <h1>{props.course}</h1>
-    </div>
-  );
-};
-
-// 1.2 course information step2
-const Part = (props) => {
-  return (
-    <div>
-      <p>
-        {props.part} {props.exercises}
-      </p>
-    </div>
-  );
-};
-const Content = (props) => {
-  return (
-    <div>
-      <p>
-        <Part part={props.parts[0].name} exercises={props.parts[0].exercises} />
-        <Part part={props.parts[1].name} exercises={props.parts[1].exercises} />
-        <Part part={props.parts[2].name} exercises={props.parts[2].exercises} />
-      </p>
-    </div>
-  );
-};
-
-const Total = (props) => {
-  return (
-    <div>
-      <p>
-        Number of exercises{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
-    </div>
-  );
-};
+import { useState } from "react";
 
 const App = () => {
-  // const course = "Half Stack application development";
-  // const part1 = "Fundamentals of React";
-  // const exercises1 = 10;
-  // const part2 = "Using props to pass data";
-  // const exercises2 = 7;
-  // const part3 = "State of a component";
-  // const exercises3 = 14;
+  const anecdotes = [
+    "If it hurts, do it more often.",
+    "Adding manpower to a late software project makes it later!",
+    "The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+    "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+    "Premature optimization is the root of all evil.",
+    "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+    "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.",
+  ];
 
-  const course = {
-    name: "Half Stack application development",
-    parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
-    ],
+  const [selected, setSelected] = useState(0);
+
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+
+  const handleNextAnecdote = () => {
+    setSelected(Math.floor(Math.random() * anecdotes.length));
   };
+
+  const handleVote = () => {
+    const copy = [...votes];
+    copy[selected] += 1;
+    setVotes(copy);
+  };
+
+  const mostVoted = votes.indexOf(Math.max(...votes));
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={handleNextAnecdote}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[mostVoted]}</p>
+      <p>has {votes[mostVoted]} votes</p>
     </div>
   );
 };
